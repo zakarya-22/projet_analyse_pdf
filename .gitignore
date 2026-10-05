@@ -1,17 +1,13 @@
 ﻿# Python
 __pycache__/
 *.py[cod]
-*.class
-*.so
 *.egg-info/
 dist/
 build/
-*.egg
 
-# Virtual environment
+# Environnement virtuel
 .venv/
 venv/
-ENV/
 
 # IDE
 .vscode/
@@ -21,5 +17,14 @@ ENV/
 Thumbs.db
 .DS_Store
 
-# Data (optional - remove if you want to track data files)
-# data/
+# Donnees lourdes (a ne pas versionner)
+data/raw/
+data/chroma_db/
+data/*.pdf
+
+# Logs
+logs/
+!logs/.gitkeep
+
+# Modeles (optionnel - decommenter si trop lourds)
+# models/
