@@ -1,42 +1,50 @@
-﻿import joblib
-import numpy as np
-import pandas as pd
+﻿import pandas as pd
+import xgboost as xgb
 import shap
-from pathlib import Path
-
+import pickle
+import numpy as np
 
 class CreditScorer:
-    def __init__(self, model_path: str | Path, columns_path: str | Path):
-        self.model_path = Path(model_path)
-        self.columns_path = Path(columns_path)
+    def __init__(self, model_path: str, columns_path: str):
+        self.model_path = model_path
+        self.columns_path = columns_path
         self.model = None
-        self.columns: list[str] = []
+        self.columns = None
         self._explainer = None
 
-    def load(self) -> "CreditScorer":
-        self.model = joblib.load(self.model_path)
-        self.columns = list(joblib.load(self.columns_path))
+    def load(self):
+        with open(self.model_path, "rb") as f:
+            self.model = pickle.load(f)
+        with open(self.columns_path, "rb") as f:
+            self.columns = pickle.load(f)
+        
         self._explainer = shap.TreeExplainer(self.model)
         return self
 
     def _align(self, df: pd.DataFrame) -> pd.DataFrame:
-        return df.reindex(columns=self.columns, fill_value=0)
+        df = df.copy()
+        for col in self.columns:
+            if col not in df.columns:
+                df[col] = 0.0
+        return df[self.columns]
 
-    def predict(self, client_row: pd.DataFrame) -> float:
-        return float(self.model.predict_proba(self._align(client_row))[0][1])
-
-    def predict_batch(self, df: pd.DataFrame) -> np.ndarray:
-        return self.model.predict_proba(self._align(df))[:, 1]
+    def predict(self, df: pd.DataFrame) -> float:
+        X = self._align(df)
+        prob = self.model.predict_proba(X)[:, 1]
+        return float(prob[0])
 
     def explain(self, client_row: pd.DataFrame) -> dict:
         X = self._align(client_row)
         raw = self._explainer.shap_values(X)
         sv = np.array(raw[1] if isinstance(raw, list) else raw).flatten()
-        top_idx = int(np.argmax(np.abs(sv)))
+        
+        # Recuperer le TOP 3
+        top_indices = np.argsort(np.abs(sv))[-3:][::-1]
+        
         return {
             "shap_values": sv,
-            "top_feature": self.columns[top_idx],
-            "top_value": float(X.iloc[0, top_idx]),
-            "top_shap": float(sv[top_idx]),
             "feature_names": list(self.columns),
+            "top_3_features": [self.columns[i] for i in top_indices],
+            "top_3_values": [float(X.iloc[0, i]) for i in top_indices],
+            "top_3_shaps": [float(sv[i]) for i in top_indices],
         }
