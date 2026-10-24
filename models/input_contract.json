@@ -1,0 +1,12 @@
+{
+  "source_notebook": "d-tection-de-faillite (3).ipynb",
+  "sha256": "f23942078a2bf7ed87b3b79607353f9d26006a8e28f90f3e51f09b25a313d014",
+  "dataset": "fedesoriano/company-bankruptcy-prediction/data.csv",
+  "target": "Bankrupt?",
+  "positive_class": 1,
+  "preprocessing": "Column selection only: constant removal, Spearman filter, forward selection. No scaler fitted in notebook.",
+  "input_representation": "Numeric values as provided in the source dataset, no conversion inferred.",
+  "raw_financial_units_mapping": null,
+  "ui_threshold": 0.06,
+  "threshold_note": "Existing application threshold retained; notebook explores thresholds including 0.0567. No ML re-evaluation performed."
+}

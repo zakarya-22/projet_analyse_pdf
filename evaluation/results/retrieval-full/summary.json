@@ -1,0 +1,122 @@
+{
+  "vector": {
+    "n": 40,
+    "generation_errors": 0,
+    "page_hit_at_2": {
+      "mean": 0.625,
+      "n_valid": 32
+    },
+    "faithfulness": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "context_precision": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "context_recall": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "abstention_correct": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "false_abstention": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "citation_id_validity": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "retrieval_seconds": {
+      "mean": 0.246536402496713,
+      "n_valid": 40
+    },
+    "generation_seconds": {
+      "mean": null,
+      "n_valid": 0
+    }
+  },
+  "hybrid": {
+    "n": 40,
+    "generation_errors": 0,
+    "page_hit_at_2": {
+      "mean": 0.6875,
+      "n_valid": 32
+    },
+    "faithfulness": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "context_precision": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "context_recall": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "abstention_correct": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "false_abstention": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "citation_id_validity": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "retrieval_seconds": {
+      "mean": 0.23021294249992935,
+      "n_valid": 40
+    },
+    "generation_seconds": {
+      "mean": null,
+      "n_valid": 0
+    }
+  },
+  "hybrid_rerank": {
+    "n": 40,
+    "generation_errors": 0,
+    "page_hit_at_2": {
+      "mean": 0.96875,
+      "n_valid": 32
+    },
+    "faithfulness": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "context_precision": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "context_recall": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "abstention_correct": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "false_abstention": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "citation_id_validity": {
+      "mean": null,
+      "n_valid": 0
+    },
+    "retrieval_seconds": {
+      "mean": 2.5845151600035026,
+      "n_valid": 40
+    },
+    "generation_seconds": {
+      "mean": null,
+      "n_valid": 0
+    }
+  }
+}

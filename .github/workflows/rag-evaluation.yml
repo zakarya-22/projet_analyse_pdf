@@ -1,0 +1,43 @@
+name: RAG evaluation (local Ollama)
+on:
+  workflow_dispatch:
+    inputs:
+      judge_model:
+        description: "Modèle juge déjà installé sur le runner Ollama"
+        default: "mistral"
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: rag-evaluation
+  cancel-in-progress: false
+jobs:
+  evaluate:
+    # Dedicated trusted machine with Ollama and cached Hugging Face models.
+    # Never triggered by pull requests, and never deploys anything.
+    runs-on: [self-hosted, rag-eval]
+    timeout-minutes: 360
+    env:
+      RAGAS_DO_NOT_TRACK: "true"
+      ANONYMIZED_TELEMETRY: "false"
+      JUDGE_MODEL: ${{ inputs.judge_model }}
+      OUTPUT_DIR: reports/rag-${{ github.run_id }}-${{ github.run_attempt }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.5"
+      - run: uv python install 3.12
+      - run: uv sync --locked --extra eval
+      - run: uv run --locked --extra eval python -m scripts.build_vectordb --db data/eval_chroma
+      - run: uv run --locked --extra eval python -m scripts.evaluate_rag --db data/eval_chroma --judge-model "$JUDGE_MODEL" --output "$OUTPUT_DIR"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rag-evaluation
+          path: reports/rag-*/
+          if-no-files-found: warn

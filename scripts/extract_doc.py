@@ -1,16 +1,18 @@
-﻿"""
+"""
 Extraction du document PDF en fichier Markdown structure.
 Usage : uv run python scripts/extract_doc.py
 """
+
 import time
 from pathlib import Path
+
 import pdfplumber
 
-ROOT       = Path(__file__).parent.parent
-PDF_PATH   = ROOT / "data" / "bnp-urd-2025-fr-mel3.pdf"
-MD_PATH    = ROOT / "data" / "bnp_risque_credit.md"
+ROOT = Path(__file__).parent.parent
+PDF_PATH = ROOT / "data" / "bnp-urd-2025-fr-mel3.pdf"
+MD_PATH = ROOT / "data" / "bnp_risque_credit.md"
 PAGE_START = 413
-PAGE_END   = 514
+PAGE_END = 514
 
 
 def extract(pdf_path: Path, md_path: Path, start: int, end: int) -> None:
@@ -18,11 +20,11 @@ def extract(pdf_path: Path, md_path: Path, start: int, end: int) -> None:
 
     with pdfplumber.open(pdf_path) as pdf:
         for idx in range(start - 1, min(end, len(pdf.pages))):
-            page    = pdf.pages[idx]
-            w, h    = page.width, page.height
-            left    = page.within_bbox((0, 0, w / 2, h)).extract_text() or ""
-            right   = page.within_bbox((w / 2, 0, w, h)).extract_text() or ""
-            text    = (left + "\n\n" + right).strip()
+            page = pdf.pages[idx]
+            w, h = page.width, page.height
+            left = page.within_bbox((0, 0, w / 2, h)).extract_text() or ""
+            right = page.within_bbox((w / 2, 0, w, h)).extract_text() or ""
+            text = (left + "\n\n" + right).strip()
 
             content.append(f"\n\n## Page {idx + 1}\n\n{text}")
 
@@ -30,8 +32,8 @@ def extract(pdf_path: Path, md_path: Path, start: int, end: int) -> None:
                 if not table:
                     continue
                 header = "| " + " | ".join(str(c or "").replace("\n", " ") for c in table[0]) + " |"
-                sep    = "| " + " | ".join("---" for _ in table[0]) + " |"
-                rows   = [
+                sep = "| " + " | ".join("---" for _ in table[0]) + " |"
+                rows = [
                     "| " + " | ".join(str(c or "").replace("\n", " ") for c in row) + " |"
                     for row in table[1:]
                 ]

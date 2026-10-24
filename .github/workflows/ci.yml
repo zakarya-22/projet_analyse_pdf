@@ -1,0 +1,41 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      RAGAS_DO_NOT_TRACK: "true"
+      ANONYMIZED_TELEMETRY: "false"
+      HF_HUB_OFFLINE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.5"
+          enable-cache: true
+      - name: Install Python 3.12
+        run: uv python install 3.12
+      - name: Install locked dependencies
+        run: uv sync --locked --extra eval
+      - name: Check Ragas imports
+        run: uv run --locked --extra eval python -c "from ragas.metrics import Faithfulness, LLMContextPrecisionWithReference, LLMContextRecall; from ragas.llms import LangchainLLMWrapper"
+      - name: Lint
+        run: uv run --locked --extra eval ruff check .
+      - name: Check formatting
+        run: uv run --locked --extra eval ruff format --check .
+      - name: Run tests and collect coverage
+        run: uv run --locked --extra eval pytest --junitxml=reports/tests.xml --cov=src --cov-report=xml:reports/coverage.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tests-and-coverage
+          path: reports/*.xml
+          if-no-files-found: warn

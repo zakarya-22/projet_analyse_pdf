@@ -28,3 +28,13 @@ logs/
 
 # Modeles (optionnel - decommenter si trop lourds)
 # models/
+
+.venv-ci/
+.uv-cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+reports/
+data/eval_chroma/
+data/chroma_v2/

@@ -1,4 +1,4 @@
-﻿import logging
+import logging
 from datetime import datetime
 from pathlib import Path
 
@@ -8,9 +8,7 @@ def _init_logger(log_path: Path) -> logging.Logger:
     logger = logging.getLogger("credit_audit")
     if not logger.handlers:
         fh = logging.FileHandler(log_path, encoding="utf-8")
-        fh.setFormatter(
-            logging.Formatter("%(asctime)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-        )
+        fh.setFormatter(logging.Formatter("%(asctime)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S"))
         logger.addHandler(fh)
         logger.setLevel(logging.INFO)
     return logger
