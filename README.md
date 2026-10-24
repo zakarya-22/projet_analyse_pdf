@@ -10,7 +10,6 @@ vérifiées dans les passages cités ; aucune garantie de zéro hallucination.
 Pour l'entretien : [fiche PDF d'une page](output/pdf/fiche_entretien.pdf)
 et [version modifiable](FICHE_ENTRETIEN.md).
 Pour les chiffres mesurés et leurs limites : [premier rapport](evaluation/RESULTS.md).
-Pour comprendre les changements apportés : [résumé des nouveautés](README_NOUVEAUTES.md).
 
 ## Installation reproductible
 

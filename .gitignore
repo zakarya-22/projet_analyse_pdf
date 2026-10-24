@@ -36,5 +36,6 @@ logs/
 .coverage
 coverage.xml
 reports/
+README_NOUVEAUTES.md
 data/eval_chroma/
 data/chroma_v2/
